@@ -57,6 +57,7 @@ function algorithm(arr) {
   const [isRunning, setIsRunning] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("0")
+  const [response, setResponse] = useState<string | null>(null)
 
   const generateTestData = (size: number): number[] => {
     return Array.from({ length: size }, () => Math.floor(Math.random() * size))
@@ -112,6 +113,7 @@ function algorithm(arr) {
         if (!snippet.code.trim()) continue
 
         try {
+          analyzeComplexity(snippet.code)
           const fn = executeCode(snippet.code)
 
           for (const size of sizes) {
@@ -160,7 +162,13 @@ function algorithm(arr) {
   const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#8dd1e1"]
 
   const analyzeComplexity = (code: string) => {
-    return responseGenerator(code);
+    return responseGenerator(code)
+      .then((res) => {
+        setResponse(res as string)
+      })
+      .catch((err) => {
+        setError(`Complexity analysis failed: ${err instanceof Error ? err.message : "Unknown error"}`)
+      })
   }
 
   return (
@@ -276,7 +284,7 @@ function algorithm(arr) {
                   {codeSnippets.map((snippet) => (
                     <div key={snippet.name} className="flex justify-between items-center p-2 bg-muted rounded">
                       <span className="font-medium">{snippet.name}:</span>
-                      <span className="text-sm">{analyzeComplexity(snippet.code)}</span>
+                      <span className="text-sm">{response}</span>
                     </div>
                   ))}
                 </div>
