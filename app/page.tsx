@@ -58,10 +58,10 @@ function algorithm(arr) {
   const [activeTab, setActiveTab] = useState("0")
 
   const generateTestData = (size: number): number[] => {
-    return Array.from({ length: size }, (_, i) => Math.floor(Math.random() * size))
+    return Array.from({ length: size }, () => Math.floor(Math.random() * size))
   }
 
-  const measurePerformance = (fn: Function, data: number[]): number => {
+  const measurePerformance = (fn: (arr: number[]) => unknown, data: number[]): number => {
     const iterations = 5
     let totalTime = 0
 
@@ -75,7 +75,7 @@ function algorithm(arr) {
     return totalTime / iterations
   }
 
-  const executeCode = (code: string): Function => {
+  const executeCode = (code: string): (arr: number[]) => unknown => {
     try {
       // Create a safe execution context
       const wrappedCode = `
@@ -178,7 +178,7 @@ function algorithm(arr) {
       })
     }
     return acc
-  }, [] as any[])
+  }, [] as { inputSize: number;[key: string]: number }[])
 
   const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#8dd1e1"]
 
@@ -239,7 +239,7 @@ function algorithm(arr) {
                   </div>
 
                   <div>
-                    <Label htmlFor={`code-${index}`}>Code (must export 'algorithm' function)</Label>
+                    <Label htmlFor={`code-${index}`}>Code (must export &apos;algorithm&apos; function)</Label>
                     <Textarea
                       id={`code-${index}`}
                       value={snippet.code}
@@ -347,10 +347,10 @@ function algorithm(arr) {
           <CardTitle>How to Use</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>1. Write your algorithms in the code editors above. Each must export a function named 'algorithm'.</p>
+          <p>1. Write your algorithms in the code editors above. Each must export a function named &apos;algorithm&apos;.</p>
           <p>2. The function should accept an array as input and return a result.</p>
           <p>3. Specify input sizes to test (e.g., 10,50,100,500,1000).</p>
-          <p>4. Click "Run Benchmark" to measure performance across different input sizes.</p>
+          <p>4. Click &apos;Run Benchmark&apos; to measure performance across different input sizes.</p>
           <p>5. View the results in the chart to compare time complexity patterns.</p>
         </CardContent>
       </Card>
