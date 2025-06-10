@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import responseGenerator from "@/lib/api/api"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -158,23 +159,8 @@ function algorithm(arr) {
 
   const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#8dd1e1"]
 
-  const analyzeComplexity = (data: BenchmarkResult[], codeName: string) => {
-    const codeData = data.filter((d) => d.codeName === codeName).sort((a, b) => a.inputSize - b.inputSize)
-    if (codeData.length < 2) return "Insufficient data"
-
-    const ratios = []
-    for (let i = 1; i < codeData.length; i++) {
-      const sizeRatio = codeData[i].inputSize / codeData[i - 1].inputSize
-      const timeRatio = codeData[i].runtime / codeData[i - 1].runtime
-      ratios.push(timeRatio / sizeRatio)
-    }
-
-    const avgRatio = ratios.reduce((a, b) => a + b, 0) / ratios.length
-
-    if (avgRatio < 1.5) return "O(n) - Linear"
-    if (avgRatio < 3) return "O(n log n) - Linearithmic"
-    if (avgRatio < 10) return "O(n²) - Quadratic"
-    return "O(n³+) - Polynomial or worse"
+  const analyzeComplexity = (code: string) => {
+    return responseGenerator(code);
   }
 
   return (
@@ -290,7 +276,7 @@ function algorithm(arr) {
                   {codeSnippets.map((snippet) => (
                     <div key={snippet.name} className="flex justify-between items-center p-2 bg-muted rounded">
                       <span className="font-medium">{snippet.name}:</span>
-                      <span className="text-sm">{analyzeComplexity(results, snippet.name)}</span>
+                      <span className="text-sm">{analyzeComplexity(snippet.code)}</span>
                     </div>
                   ))}
                 </div>
