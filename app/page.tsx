@@ -143,30 +143,6 @@ function algorithm(arr) {
     setCodeSnippets(updated)
   }
 
-  const addCodeSnippet = () => {
-    setCodeSnippets([
-      ...codeSnippets,
-      {
-        name: `Algorithm ${String.fromCharCode(65 + codeSnippets.length)}`,
-        code: `// New algorithm
-function algorithm(arr) {
-  // Your code here
-  return arr.length;
-}`,
-      },
-    ])
-  }
-
-  const removeCodeSnippet = (index: number) => {
-    if (codeSnippets.length > 1) {
-      const updated = codeSnippets.filter((_, i) => i !== index)
-      setCodeSnippets(updated)
-      if (Number.parseInt(activeTab) >= updated.length) {
-        setActiveTab("0")
-      }
-    }
-  }
-
   const chartData = results.reduce((acc, result) => {
     const existing = acc.find((item) => item.inputSize === result.inputSize)
     if (existing) {
@@ -229,7 +205,7 @@ function algorithm(arr) {
               {codeSnippets.map((snippet, index) => (
                 <TabsContent key={index} value={index.toString()} className="space-y-4">
                   <div>
-                    <Label htmlFor={`name-${index}`}>Algorithm Name</Label>
+                    <Label htmlFor={`name-${index}`} className="mb-2">Algorithm Name</Label>
                     <Input
                       id={`name-${index}`}
                       value={snippet.name}
@@ -239,7 +215,7 @@ function algorithm(arr) {
                   </div>
 
                   <div>
-                    <Label htmlFor={`code-${index}`}>Code (must export &apos;algorithm&apos; function)</Label>
+                    <Label htmlFor={`code-${index}`} className="mb-2">Code (must export &apos;algorithm&apos; function)</Label>
                     <Textarea
                       id={`code-${index}`}
                       value={snippet.code}
@@ -249,25 +225,12 @@ function algorithm(arr) {
                     />
                   </div>
 
-                  <div className="flex gap-2">
-                    {codeSnippets.length > 1 && (
-                      <Button variant="outline" size="sm" onClick={() => removeCodeSnippet(index)}>
-                        Remove
-                      </Button>
-                    )}
-                  </div>
                 </TabsContent>
               ))}
             </Tabs>
 
-            <div className="flex gap-2">
-              <Button variant="outline" onClick={addCodeSnippet}>
-                Add Algorithm
-              </Button>
-            </div>
-
             <div>
-              <Label htmlFor="input-sizes">Input Sizes (comma-separated)</Label>
+              <Label htmlFor="input-sizes" className="mb-2">Input Sizes (comma-separated)</Label>
               <Input
                 id="input-sizes"
                 value={inputSizes}
