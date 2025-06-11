@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { Play, AlertTriangle, TrendingUp } from "lucide-react"
+import { ModeToggle } from "@/components/mode-toggle"
 
 interface BenchmarkResult {
   inputSize: number
@@ -173,9 +174,13 @@ function algorithm(arr) {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Code Complexity Analyzer</h1>
-        <p className="text-muted-foreground">Compare algorithm performance and visualize time complexity patterns</p>
+      <div className="flex justify-between items-center mb-6">
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl font-bold">Code Complexity Analyzer</h1>
+          <p className="text-muted-foreground">Compare algorithm performance and visualize time complexity patterns</p>
+        </div>
+
+        <ModeToggle />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
