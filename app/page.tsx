@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { Play, AlertTriangle, TrendingUp } from "lucide-react"
-import { ModeToggle } from "@/components/mode-toggle"
+import { ModeToggle } from "@/utils/mode-toggle"
 
 interface BenchmarkResult {
   inputSize: number
@@ -97,7 +97,6 @@ function algorithm(arr) {
       const res = await responseGenerator(code);
       console.log(`Analysis for algorithm ${index}:`, res);
 
-      // Create a new reference for the updated array
       setCodeSnippets(prevSnippets => {
         const updated = [...prevSnippets];
         updated[index] = { ...updated[index], complexityAnalysis: res as string };
@@ -128,16 +127,12 @@ function algorithm(arr) {
 
       const newResults: BenchmarkResult[] = [];
 
-      // Process each algorithm one by one
       for (let i = 0; i < codeSnippets.length; i++) {
         const snippet = codeSnippets[i];
         if (!snippet.code.trim()) continue;
 
         try {
-          // First analyze the complexity
           await analyzeComplexity(snippet.code, i);
-
-          // Then run the benchmarks
           const fn = executeCode(snippet.code);
 
           for (const size of sizes) {
