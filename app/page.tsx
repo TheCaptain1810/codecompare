@@ -23,6 +23,7 @@ interface BenchmarkResult {
 interface CodeSnippet {
   name: string
   code: string
+  complexityAnalysis?: string;
 }
 
 export default function CodeComplexityAnalyzer() {
@@ -58,7 +59,6 @@ function algorithm(arr) {
   const [isRunning, setIsRunning] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("0")
-  const [response, setResponse] = useState<string | null>(null)
 
   const generateTestData = (size: number): number[] => {
     return Array.from({ length: size }, () => Math.floor(Math.random() * size))
@@ -80,7 +80,6 @@ function algorithm(arr) {
 
   const executeCode = (code: string): (arr: number[]) => unknown => {
     try {
-      // Create a safe execution context
       const wrappedCode = `
         (function() {
           ${code}
@@ -93,9 +92,22 @@ function algorithm(arr) {
     }
   }
 
+  const analyzeComplexity = async (code: string, index: number) => {
+    try {
+      const res = await responseGenerator(code);
+      const updated = [...codeSnippets];
+      updated[index] = { ...updated[index], complexityAnalysis: res as string };
+      setCodeSnippets(updated);
+      return res;
+    } catch (err) {
+      setError(`Complexity analysis failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+      return null;
+    }
+  }
+
   const runBenchmark = async () => {
-    setIsRunning(true)
-    setError(null)
+    setIsRunning(true);
+    setError(null);
     setResults([])
 
     try {
@@ -114,7 +126,8 @@ function algorithm(arr) {
         if (!snippet.code.trim()) continue
 
         try {
-          analyzeComplexity(snippet.code)
+          // Pass the index to store analysis for this specific algorithm
+          await analyzeComplexity(snippet.code, i);
           const fn = executeCode(snippet.code)
 
           for (const size of sizes) {
@@ -161,16 +174,6 @@ function algorithm(arr) {
   }, [] as { inputSize: number;[key: string]: number }[])
 
   const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#8dd1e1"]
-
-  const analyzeComplexity = (code: string) => {
-    return responseGenerator(code)
-      .then((res) => {
-        setResponse(res as string)
-      })
-      .catch((err) => {
-        setError(`Complexity analysis failed: ${err instanceof Error ? err.message : "Unknown error"}`)
-      })
-  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -289,7 +292,7 @@ function algorithm(arr) {
                   {codeSnippets.map((snippet) => (
                     <div key={snippet.name} className="flex justify-between items-center p-2 bg-muted rounded">
                       <span className="font-medium">{snippet.name}:</span>
-                      <span className="text-sm">{response}</span>
+                      <span className="text-sm">{snippet.complexityAnalysis ?? "Not analyzed yet"}</span>
                     </div>
                   ))}
                 </div>
