@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { Play, AlertTriangle, TrendingUp } from "lucide-react"
-import { ModeToggle } from "@/utils/mode-toggle"
+import { ModeToggle } from "@/components/mode-toggle"
 
 interface BenchmarkResult {
   inputSize: number
