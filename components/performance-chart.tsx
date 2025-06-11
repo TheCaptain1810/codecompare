@@ -6,12 +6,12 @@ import { CodeSnippet, BenchmarkResult } from "@/lib/hooks/useBenchmark";
 interface PerformanceChartProps {
   results: BenchmarkResult[];
   codeSnippets: CodeSnippet[];
-  chartData: { inputSize: number; [key: string]: number }[];
+  chartData: { inputSize: number;[key: string]: number }[];
 }
 
 const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#8dd1e1"];
 
-export function PerformanceChart({ results, codeSnippets, chartData }: PerformanceChartProps) {
+export function PerformanceChart({ results, codeSnippets, chartData }: Readonly<PerformanceChartProps>) {
   return (
     <Card>
       <CardHeader>

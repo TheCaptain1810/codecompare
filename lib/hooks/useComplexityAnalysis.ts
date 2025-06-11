@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CodeSnippet } from "./useBenchmark";
 
 export function useComplexityAnalysis(
@@ -11,17 +10,22 @@ export function useComplexityAnalysis(
       const res = await responseGenerator(code);
       setCodeSnippets((prevSnippets) => {
         const updated = [...prevSnippets];
-        updated[index] = { ...updated[index], complexityAnalysis: res as string };
+        updated[index] = {
+          ...updated[index],
+          complexityAnalysis: res as string,
+        };
         return updated;
       });
       return res;
     } catch (err) {
       setError(
-        `Complexity analysis failed: ${err instanceof Error ? err.message : "Unknown error"}`
+        `Complexity analysis failed: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
       );
       return null;
     }
   };
 
   return { analyzeComplexity };
-} 
+}
