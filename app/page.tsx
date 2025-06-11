@@ -95,6 +95,7 @@ function algorithm(arr) {
   const analyzeComplexity = async (code: string, index: number) => {
     try {
       const res = await responseGenerator(code);
+      console.log(`Analysis for algorithm ${index}:`, res); // Add this debug line
       const updated = [...codeSnippets];
       updated[index] = { ...updated[index], complexityAnalysis: res as string };
       setCodeSnippets(updated);
@@ -290,9 +291,11 @@ function algorithm(arr) {
                 <div className="space-y-2">
                   <h4 className="font-semibold">Complexity Analysis</h4>
                   {codeSnippets.map((snippet) => (
-                    <div key={snippet.name} className="flex justify-between items-center p-2 bg-muted rounded">
-                      <span className="font-medium">{snippet.name}:</span>
-                      <span className="text-sm">{snippet.complexityAnalysis ?? "Not analyzed yet"}</span>
+                    <div key={snippet.name} className="flex flex-col p-2 bg-muted rounded">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">{snippet.name}:</span>
+                        <span className="text-sm">{snippet.complexityAnalysis ?? "Not analyzed yet"}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
