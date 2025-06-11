@@ -194,15 +194,15 @@ function algorithm(arr) {
           <CardContent className="space-y-4">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
-                {codeSnippets.map((_, index) => (
-                  <TabsTrigger key={index} value={index.toString()}>
-                    {codeSnippets[index].name}
+                {codeSnippets.map((snippet, index) => (
+                  <TabsTrigger key={snippet.name} value={index.toString()}>
+                    {snippet.name}
                   </TabsTrigger>
                 ))}
               </TabsList>
 
               {codeSnippets.map((snippet, index) => (
-                <TabsContent key={index} value={index.toString()} className="space-y-4">
+                <TabsContent key={snippet.name} value={index.toString()} className="space-y-4">
                   <div>
                     <Label htmlFor={`name-${index}`} className="mb-2">Algorithm Name</Label>
                     <Input

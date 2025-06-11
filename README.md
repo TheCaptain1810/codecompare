@@ -73,7 +73,7 @@ yarn dev
 - [React](https://reactjs.org/) - UI library
 - [Recharts](https://recharts.org/) - Data visualization
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [Radix UI](https://www.radix-ui.com/) - UI components
+- [Shadcn UI](https://ui.shadcn.com/) - UI components
 - [Google Gemini AI](https://ai.google.dev/) - Complexity analysis
 
 ## Project Structure
