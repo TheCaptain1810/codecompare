@@ -68,12 +68,12 @@ function algorithm(arr) {
 
   useEffect(() => {
     if (results.length > 0 && performanceRef.current) {
-      performanceRef.current.scrollIntoView({ behavior: "smooth" })
+      performanceRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
     }
   }, [results])
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 max-w-6xl">
       <div className="flex flex-col justify-between items-center sm:flex-row mb-6">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">Code Complexity Analyzer</h1>
@@ -94,7 +94,7 @@ function algorithm(arr) {
           error={error}
         />
         {results.length > 0 && (
-          <div ref={performanceRef}>
+          <div ref={performanceRef} className="scroll-mt-24">
             <PerformanceChart
               results={results}
               codeSnippets={codeSnippets}
