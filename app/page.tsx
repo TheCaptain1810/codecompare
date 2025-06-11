@@ -95,10 +95,15 @@ function algorithm(arr) {
   const analyzeComplexity = async (code: string, index: number) => {
     try {
       const res = await responseGenerator(code);
-      console.log(`Analysis for algorithm ${index}:`, res); // Add this debug line
-      const updated = [...codeSnippets];
-      updated[index] = { ...updated[index], complexityAnalysis: res as string };
-      setCodeSnippets(updated);
+      console.log(`Analysis for algorithm ${index}:`, res);
+      
+      // Create a new reference for the updated array
+      setCodeSnippets(prevSnippets => {
+        const updated = [...prevSnippets];
+        updated[index] = { ...updated[index], complexityAnalysis: res as string };
+        return updated;
+      });
+      
       return res;
     } catch (err) {
       setError(`Complexity analysis failed: ${err instanceof Error ? err.message : "Unknown error"}`);
@@ -109,49 +114,53 @@ function algorithm(arr) {
   const runBenchmark = async () => {
     setIsRunning(true);
     setError(null);
-    setResults([])
+    setResults([]);
 
     try {
       const sizes = inputSizes
         .split(",")
         .map((s) => Number.parseInt(s.trim()))
-        .filter((n) => !isNaN(n))
+        .filter((n) => !isNaN(n));
+      
       if (sizes.length === 0) {
-        throw new Error("Please provide valid input sizes")
+        throw new Error("Please provide valid input sizes");
       }
 
-      const newResults: BenchmarkResult[] = []
+      const newResults: BenchmarkResult[] = [];
 
+      // Process each algorithm one by one
       for (let i = 0; i < codeSnippets.length; i++) {
-        const snippet = codeSnippets[i]
-        if (!snippet.code.trim()) continue
+        const snippet = codeSnippets[i];
+        if (!snippet.code.trim()) continue;
 
         try {
-          // Pass the index to store analysis for this specific algorithm
+          // First analyze the complexity
           await analyzeComplexity(snippet.code, i);
-          const fn = executeCode(snippet.code)
+          
+          // Then run the benchmarks
+          const fn = executeCode(snippet.code);
 
           for (const size of sizes) {
-            const testData = generateTestData(size)
-            const runtime = measurePerformance(fn, testData)
+            const testData = generateTestData(size);
+            const runtime = measurePerformance(fn, testData);
 
             newResults.push({
               inputSize: size,
               runtime,
               codeIndex: i,
               codeName: snippet.name,
-            })
+            });
           }
         } catch (e) {
-          throw new Error(`Error in ${snippet.name}: ${e instanceof Error ? e.message : "Unknown error"}`)
+          throw new Error(`Error in ${snippet.name}: ${e instanceof Error ? e.message : "Unknown error"}`);
         }
       }
 
-      setResults(newResults)
+      setResults(newResults);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "An unknown error occurred")
+      setError(e instanceof Error ? e.message : "An unknown error occurred");
     } finally {
-      setIsRunning(false)
+      setIsRunning(false);
     }
   }
 
