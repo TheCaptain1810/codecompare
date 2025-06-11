@@ -96,14 +96,14 @@ function algorithm(arr) {
     try {
       const res = await responseGenerator(code);
       console.log(`Analysis for algorithm ${index}:`, res);
-      
+
       // Create a new reference for the updated array
       setCodeSnippets(prevSnippets => {
         const updated = [...prevSnippets];
         updated[index] = { ...updated[index], complexityAnalysis: res as string };
         return updated;
       });
-      
+
       return res;
     } catch (err) {
       setError(`Complexity analysis failed: ${err instanceof Error ? err.message : "Unknown error"}`);
@@ -121,7 +121,7 @@ function algorithm(arr) {
         .split(",")
         .map((s) => Number.parseInt(s.trim()))
         .filter((n) => !isNaN(n));
-      
+
       if (sizes.length === 0) {
         throw new Error("Please provide valid input sizes");
       }
@@ -136,7 +136,7 @@ function algorithm(arr) {
         try {
           // First analyze the complexity
           await analyzeComplexity(snippet.code, i);
-          
+
           // Then run the benchmarks
           const fn = executeCode(snippet.code);
 
@@ -187,10 +187,10 @@ function algorithm(arr) {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col justify-between items-center sm:flex-row mb-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold">Code Complexity Analyzer</h1>
-          <p className="text-muted-foreground">Compare algorithm performance and visualize time complexity patterns</p>
+          <p className="text-muted-foreground mb-2">Compare algorithm performance and visualize time complexity patterns</p>
         </div>
 
         <ModeToggle />
@@ -301,7 +301,7 @@ function algorithm(arr) {
                   <h4 className="font-semibold">Complexity Analysis</h4>
                   {codeSnippets.map((snippet) => (
                     <div key={snippet.name} className="flex flex-col p-2 bg-muted rounded">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col justify-between items-center">
                         <span className="font-medium">{snippet.name}:</span>
                         <span className="text-sm">{snippet.complexityAnalysis ?? "Not analyzed yet"}</span>
                       </div>
